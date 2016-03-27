@@ -17,8 +17,11 @@ public class MainFrame extends JFrame implements ActionListener
 	JLabel lblInput = new JLabel("Input: ");
 	
 	JButton btnConvert = new JButton("Convert");
+	
 	JRadioButton rdbtnHexToInstruction = new JRadioButton("Hex to Instruction");
 	JRadioButton rdbtnInstructionToHex = new JRadioButton("Instruction to Hex");
+	
+	ButtonGroup group = new ButtonGroup();
 	
 	public MainFrame() 
 	{
@@ -47,6 +50,11 @@ public class MainFrame extends JFrame implements ActionListener
 		
 		formPanel.add(rdbtnInstructionToHex, BorderLayout.EAST);
 		
+		//Adds radio buttons to a group
+		group.add(rdbtnHexToInstruction);
+		group.add(rdbtnInstructionToHex);
+		rdbtnHexToInstruction.setSelected(true);
+		
 		//Register listeners to the buttons
 		btnConvert.addActionListener(this);
 		rdbtnHexToInstruction.addActionListener(this);
@@ -60,18 +68,31 @@ public class MainFrame extends JFrame implements ActionListener
 	public void actionPerformed(ActionEvent e) 
 	{
 		if (btnConvert.equals(e.getSource()))
+		{
+			String input = inputField.getText();
+			//Validates input
+			if (input.length() < 6) //anything below 6 is invalid
 			{
-				System.out.println("Converting input type: " + inputType);
-				//OR managerClass.convert(inputType);
-				if (inputType == 0)
-				{
-					//Convert from Hex to Instruction
-				}
-				else //inputType == 1
-				{
-					//Convert from Instruction to Hex
-				}
+				JOptionPane.showMessageDialog(getRootPane(), "Invalid Input!", "Input Error", JOptionPane.ERROR_MESSAGE);
+				return;
 			}
+			else if (inputType == 0 && input.length() > 6) //invalid Hex
+			{
+				JOptionPane.showMessageDialog(getRootPane(), "Invalid Hex code!", "Input Error", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			
+			System.out.println("Converting input type: " + inputType);
+			//OR managerClass.convert(inputType);
+			if (inputType == 0)
+			{
+				//Convert from Hex to Instruction
+			}
+			else //inputType == 1
+			{
+				//Convert from Instruction to Hex
+			}
+		}
 		else //Radio buttons clicked
 		{
 			if (rdbtnHexToInstruction.equals(e.getSource()))
