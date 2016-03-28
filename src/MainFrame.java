@@ -80,12 +80,12 @@ public class MainFrame extends JFrame implements ActionListener
 		{
 			String input = inputField.getText().toLowerCase();
 			//Validates input
-			if (input.length() < 8) //anything below 8 is invalid, could be 0x12345678 or 12345678(Shortest valid length) or Add t1 t2 t3
+			if (input.length() < 3) //anything below 3 is invalid
 			{
 				JOptionPane.showMessageDialog(getRootPane(), "Invalid Input!", "Input Error", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
-			else if (inputType == Manager.HEX_TO_INSTRUCTION && input.length() > 10) //invalid Hex
+			else if (inputType == Manager.HEX_TO_INSTRUCTION && input.length() != 10 && input.length() != 8) //invalid Hex
 			{
 				JOptionPane.showMessageDialog(getRootPane(), "Invalid Hex code!", "Input Error", JOptionPane.ERROR_MESSAGE);
 				return;
