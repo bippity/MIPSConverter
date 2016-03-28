@@ -1,6 +1,4 @@
-import java.io.*;
 import java.util.*;
-import java.math.*;
 
 public class MIPS
 {
@@ -116,6 +114,25 @@ public class MIPS
 		return 2;
 	}
 	
+	public static String padBinaryString(String s, int len)
+	{
+		String paddedBinary = s;
+		for(int i = len-s.length(); i > 0; i--)
+			paddedBinary = 0 + paddedBinary;
+		
+		return paddedBinary;
+	}
+	
+	public static String padHexString(String s, int len)
+	{
+		String paddedHex = s;
+		for(int i = len-s.length(); i > 0; i--)
+			paddedHex = 0 + paddedHex;
+		
+		return paddedHex;
+	}
+	
+	@SuppressWarnings("serial")
 	public static Hashtable<Integer, String> rTypeFormats = new Hashtable<Integer, String>(){{
 		put(0x20, "add  %3$s, %1$s, %2$s");
 		put(0x21, "addu  %3$s, %1$s, %2$s");
@@ -131,6 +148,7 @@ public class MIPS
 		put(0x23, "subu  %3$s, %1$s, %2$s");	
 	}};
 
+	@SuppressWarnings("serial")
 	public static Hashtable<Integer, String> iTypeFormats = new Hashtable<Integer, String>(){{
 		put(0x08, "addi  %2$s, %1$s, %3$s");
 		put(0x09, "addiu  %2$s, %1$s, %3$s");
