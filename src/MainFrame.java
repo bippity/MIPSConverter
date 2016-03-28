@@ -71,19 +71,27 @@ public class MainFrame extends JFrame implements ActionListener
 		{
 			String input = inputField.getText();
 			//Validates input
-			if (input.length() < 8) //anything below 8 is invalid
+			if (input.length() < 6) //anything below 6 is invalid
 			{
 				JOptionPane.showMessageDialog(getRootPane(), "Invalid Input!", "Input Error", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
-			else if (inputType == 0 && input.length() > 10) //invalid Hex
+			else if (inputType == 0 && input.length() > 6) //invalid Hex
 			{
 				JOptionPane.showMessageDialog(getRootPane(), "Invalid Hex code!", "Input Error", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 			
 			System.out.println("Converting input type: " + inputType);
-			Manager manager = new Manager(inputType, input);
+			//OR managerClass.convert(inputType);
+			if (inputType == 0)
+			{
+				//Convert from Hex to Instruction
+			}
+			else //inputType == 1
+			{
+				//Convert from Instruction to Hex
+			}
 		}
 		else //Radio buttons clicked
 		{
