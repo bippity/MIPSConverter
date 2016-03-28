@@ -9,12 +9,15 @@ import java.awt.event.*;
 public class MainFrame extends JFrame implements ActionListener
 {
 	private JTextField inputField;
+	private JTextField outputField;
 	private int inputType;
 	
 	JPanel panel = new JPanel();
 	JPanel formPanel = new JPanel();
 	JPanel inputPanel = new JPanel();
+	JPanel outputPanel = new JPanel();
 	JLabel lblInput = new JLabel("Input: ");
+	JLabel lblOutput = new JLabel("Output: ");
 	
 	JButton btnConvert = new JButton("Convert");
 	
@@ -32,11 +35,12 @@ public class MainFrame extends JFrame implements ActionListener
 		panel.setLayout(new BorderLayout(5, 5));
 		
 		panel.add(formPanel);
+		panel.add(outputPanel, BorderLayout.SOUTH);
 		formPanel.setLayout(new BorderLayout(2, 5));
+		outputPanel.setLayout(new GridLayout(2, 2));
 		
 		formPanel.add(inputPanel, BorderLayout.NORTH);
 		inputPanel.setLayout(new GridLayout(2, 2));
-		
 		inputPanel.add(lblInput);
 		
 		inputField = new JTextField();
@@ -44,16 +48,21 @@ public class MainFrame extends JFrame implements ActionListener
 		inputPanel.add(inputField);
 		inputField.setColumns(50);
 		
+		outputField = new JTextField();
+		outputPanel.add(lblOutput);
+		outputField.setHorizontalAlignment(SwingConstants.LEFT);
+		outputField.setColumns(50);
+		outputPanel.add(outputField);
+		
 		formPanel.add(btnConvert, BorderLayout.SOUTH);
-		
 		formPanel.add(rdbtnHexToInstruction, BorderLayout.WEST);
-		
 		formPanel.add(rdbtnInstructionToHex, BorderLayout.EAST);
 		
 		//Adds radio buttons to a group
 		group.add(rdbtnHexToInstruction);
 		group.add(rdbtnInstructionToHex);
 		rdbtnHexToInstruction.setSelected(true);
+		
 		
 		//Register listeners to the buttons
 		btnConvert.addActionListener(this);
@@ -69,36 +78,38 @@ public class MainFrame extends JFrame implements ActionListener
 	{
 		if (btnConvert.equals(e.getSource()))
 		{
-			String input = inputField.getText();
+			String input = inputField.getText().toLowerCase();
 			//Validates input
-			if (input.length() < 6) //anything below 6 is invalid
+			if (input.length() < 8) //anything below 8 is invalid, could be 0x12345678 or 12345678(Shortest valid length) or Add t1 t2 t3
 			{
 				JOptionPane.showMessageDialog(getRootPane(), "Invalid Input!", "Input Error", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
-			else if (inputType == 0 && input.length() > 6) //invalid Hex
+			else if (inputType == Manager.HEX_TO_INSTRUCTION && input.length() > 10) //invalid Hex
 			{
 				JOptionPane.showMessageDialog(getRootPane(), "Invalid Hex code!", "Input Error", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 			
-			System.out.println("Converting input type: " + inputType);
-			//OR managerClass.convert(inputType);
-			if (inputType == 0)
+			Manager manager = new Manager(inputType, input, getRootPane());
+			if (manager.initialize())
 			{
-				//Convert from Hex to Instruction
+				System.out.println("Successfully initialized manager");
+				outputField.setText(manager.convert());
 			}
-			else //inputType == 1
+			else
 			{
-				//Convert from Instruction to Hex
+				JOptionPane.showMessageDialog(getRootPane(), "Please make sure 'instructions.txt' and 'registers.txt' are valid.",
+						"Error Reading Files!", JOptionPane.ERROR_MESSAGE);
+				return;
 			}
 		}
 		else //Radio buttons clicked
 		{
 			if (rdbtnHexToInstruction.equals(e.getSource()))
-				inputType = 0;
+				inputType = Manager.HEX_TO_INSTRUCTION;
 			else
-				inputType = 1;
+				inputType = Manager.INSTRUCTION_TO_HEX;
 		}
 	}
 }
